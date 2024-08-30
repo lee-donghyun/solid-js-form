@@ -10,12 +10,13 @@ export interface SurveyForm {
       | {
           type: "text";
           input: {
-            text: string;
+            question: string;
           };
         }
       | {
           type: "radio";
           input: {
+            question: string;
             options: { text: string; id: string }[];
             defaultOptionId: string | null;
           };
@@ -23,12 +24,15 @@ export interface SurveyForm {
       | {
           type: "checkbox";
           input: {
+            question: string;
             options: { text: string; id: string; specificity: "기타" | null }[];
           };
         }
       | {
           type: "date";
-          input: null;
+          input: {
+            question: string;
+          };
         }
     )[];
   }[];

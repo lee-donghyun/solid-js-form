@@ -1,7 +1,7 @@
 import { createStore } from "solid-js/store";
 import { SurveyForm } from "./type";
 
-export const DEFAULT_SURVEY_FORM: SurveyForm = {
+export const getDefaultSurveyForm = (): SurveyForm => ({
   fname: "",
   lname: "",
   email: "",
@@ -12,6 +12,7 @@ export const DEFAULT_SURVEY_FORM: SurveyForm = {
         {
           type: "radio",
           input: {
+            question: "",
             options: [{ text: "1", id: "1" }],
             defaultOptionId: "1",
           },
@@ -21,7 +22,8 @@ export const DEFAULT_SURVEY_FORM: SurveyForm = {
     },
   ],
   birthday: "",
-};
+});
 
-export const [surveyStore, setSurveyStore] =
-  createStore<SurveyForm>(DEFAULT_SURVEY_FORM);
+export const [surveyStore, setSurveyStore] = createStore<SurveyForm>(
+  getDefaultSurveyForm()
+);

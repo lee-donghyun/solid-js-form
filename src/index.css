@@ -15,6 +15,6 @@
   grid-template-columns: 200px 1fr;
 }
 
-.styled input {
-  @apply border px-2 py-0.5 border-black;
+.styled label > input {
+  @apply border px-2 py-0.5 focus:border-black outline-none;
 }
