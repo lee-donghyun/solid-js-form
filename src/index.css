@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.styled {
+  @apply max-w-[800px] pb-16 mb-20 border-b border-black;
+}
+
+.styled h3 {
+  @apply text-3xl mb-5;
+}
+
+.styled label {
+  @apply block grid grid-cols-2 gap-2 mb-3;
+  grid-template-columns: 200px 1fr;
+}
+
+.styled label input,
+.styled label select {
+  @apply border px-2 py-0.5 focus:border-black outline-none;
+}
