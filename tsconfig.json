@@ -3,5 +3,14 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    // alias
+    "baseUrl": "./",
+    "paths": {
+      "ui/*": ["./src/ui/*"],
+      "service/*": ["./src/service/*"],
+      "domain/*": ["./src/domain/*"]
+    }
+  }
 }
