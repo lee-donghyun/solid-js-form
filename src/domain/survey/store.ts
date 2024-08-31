@@ -1,5 +1,49 @@
 import { createStore } from "solid-js/store";
-import { SurveyForm } from "./type";
+import {
+  RadioQuestion,
+  CheckboxQuestion,
+  DateQuestion,
+  TextQuestion,
+  SurveyForm,
+} from "./type";
+
+const getDefaultRadioInput = (): RadioQuestion => ({
+  type: "radio",
+  input: {
+    question: "",
+    options: [{ text: "1", id: "1" }],
+    defaultOptionId: null,
+  },
+});
+
+const getDefaultCheckboxInput = (): CheckboxQuestion => ({
+  type: "checkbox",
+  input: {
+    question: "",
+    options: [{ text: "1", id: "1", specificity: null }],
+  },
+});
+
+const getDefaultDateInput = (): DateQuestion => ({
+  type: "date",
+  input: {
+    question: "",
+  },
+});
+
+const getDefaultTextInput = (): TextQuestion => ({
+  type: "text",
+  input: {
+    question: "",
+  },
+});
+
+export const DEFAULT_QUESTION = {
+  radio: getDefaultRadioInput,
+  checkbox: getDefaultCheckboxInput,
+  date: getDefaultDateInput,
+  text: getDefaultTextInput,
+};
 
 export const getDefaultSurveyForm = (): SurveyForm => ({
   fname: "",
@@ -8,16 +52,7 @@ export const getDefaultSurveyForm = (): SurveyForm => ({
   sections: [
     {
       description: "",
-      questions: [
-        {
-          type: "radio",
-          input: {
-            question: "",
-            options: [{ text: "1", id: "1" }],
-            defaultOptionId: "1",
-          },
-        },
-      ],
+      questions: [getDefaultRadioInput()],
       title: "",
     },
   ],
