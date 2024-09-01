@@ -36,6 +36,7 @@ export const Select = <V extends string>(props: SelectProps<V>) => {
               <div>{labelMap().get(state.selectedOption())}</div>
               {props.allowClear && (
                 <button
+                  type="button"
                   onPointerDown={(e) => e.stopPropagation()}
                   onClick={() => state.clear()}
                   class="text-neutral-300"

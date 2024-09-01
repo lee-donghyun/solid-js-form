@@ -1,4 +1,4 @@
-import { createEffect, For, Match, Switch, useContext } from "solid-js";
+import { For, Match, Switch, useContext } from "solid-js";
 import {
   getDefaultSection,
   getDefaultQuestion,
@@ -18,10 +18,9 @@ import {
 import { ErrorMessage } from "ui/component/error-message";
 
 export const SurveySections = () => {
-  const [form, { Field, FieldArray }] = useContext(SurveyFormContext)!;
-  createEffect(() => {
-    console.log(getValues(form));
-  });
+  const [form, { Field, FieldArray, HiddenField }] =
+    useContext(SurveyFormContext)!;
+
   return (
     <div class="styled">
       <h3>Section</h3>
@@ -210,6 +209,9 @@ export const SurveySections = () => {
                                         <label>
                                           Option {optionIndex() + 1}:
                                           <div class="flex gap-2">
+                                            <HiddenField
+                                              name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.id`}
+                                            />
                                             <Field
                                               name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.text`}
                                             >
@@ -294,18 +296,13 @@ export const SurveySections = () => {
                                           getValues(
                                             form,
                                             `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`
-                                          )?.map((o, i) => {
-                                            console.log({ o, i });
-
-                                            return {
-                                              label: o?.text ?? "",
-                                              value: o?.id ?? "",
-                                            };
-                                          }) ?? []
+                                          )?.map((o) => ({
+                                            label: o?.text ?? "",
+                                            value: o?.id ?? "",
+                                          })) ?? []
                                         }
                                         placeholder="Select default option"
                                         onChange={(value) =>
-                                          value &&
                                           setValue(form, props.name, value)
                                         }
                                         allowClear

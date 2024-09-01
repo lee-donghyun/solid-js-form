@@ -9,20 +9,27 @@ import { SurveyFormSchema } from "domain/survey/validator";
 import { Button } from "ui/component/base/button";
 
 export const App = () => {
-  const surveyForm = createForm<SurveyForm>({
+  const [form, { Form, Field, FieldArray }] = createForm<SurveyForm>({
     initialValues: getDefaultSurveyForm(),
     validateOn: "input",
     revalidateOn: "input",
     validate: zodForm(SurveyFormSchema),
   });
 
-  const [, { Form }] = surveyForm;
-
   return (
     <>
       <Header />
       <main class="container px-5 mx-auto mt-32">
-        <SurveyFormContext.Provider value={surveyForm}>
+        <SurveyFormContext.Provider
+          value={[
+            form,
+            {
+              Field,
+              FieldArray,
+              HiddenField: (props) => <Field {...props}>{() => null}</Field>,
+            },
+          ]}
+        >
           <Form onSubmit={console.log}>
             <SurveyInfo />
             <SurveySections />
