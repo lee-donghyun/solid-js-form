@@ -8,34 +8,22 @@ import {
 } from "./type";
 
 const getDefaultRadioInput = (): RadioQuestion => ({
-  type: "radio",
-  input: {
-    question: "",
-    options: [{ text: "1", id: "1" }],
-    defaultOptionId: null,
-  },
+  question: "",
+  options: [{ text: "1", id: "1" }],
+  defaultOptionId: null,
 });
 
 const getDefaultCheckboxInput = (): CheckboxQuestion => ({
-  type: "checkbox",
-  input: {
-    question: "",
-    options: [{ text: "1", id: "1", specificity: null }],
-  },
+  question: "",
+  options: [{ text: "1", id: "1", specificity: null }],
 });
 
 const getDefaultDateInput = (): DateQuestion => ({
-  type: "date",
-  input: {
-    question: "",
-  },
+  question: "",
 });
 
 const getDefaultTextInput = (): TextQuestion => ({
-  type: "text",
-  input: {
-    question: "",
-  },
+  question: "",
 });
 
 export const DEFAULT_QUESTION = {
@@ -45,10 +33,20 @@ export const DEFAULT_QUESTION = {
   text: getDefaultTextInput,
 };
 
-export const getDefaultSection = () => ({
+export const getDefaultQuestion = (
+  type: SurveyForm["sections"][number]["questions"][number]["type"]
+): SurveyForm["sections"][number]["questions"][number] => ({
+  type,
+  radioInput: DEFAULT_QUESTION.radio(),
+  checkboxInput: DEFAULT_QUESTION.checkbox(),
+  dateInput: DEFAULT_QUESTION.date(),
+  textInput: DEFAULT_QUESTION.text(),
+});
+
+export const getDefaultSection = (): SurveyForm["sections"][number] => ({
   title: "",
   description: "",
-  questions: [getDefaultRadioInput()],
+  questions: [getDefaultQuestion("radio")],
 });
 
 export const getDefaultSurveyForm = (): SurveyForm => ({

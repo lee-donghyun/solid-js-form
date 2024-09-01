@@ -2,8 +2,8 @@ import { For, Match, Switch } from "solid-js";
 import {
   surveyStore,
   setSurveyStore,
-  DEFAULT_QUESTION,
   getDefaultSection,
+  getDefaultQuestion,
 } from "../../domain/survey/store";
 import { Select } from "ui/component/select";
 import { Input } from "ui/component/input";
@@ -82,7 +82,7 @@ export const SurveySections = () => {
                             "questions",
                             (questions) => [
                               ...questions.slice(0, questionIndex() + 1),
-                              DEFAULT_QUESTION["radio"](),
+                              getDefaultQuestion("radio"),
                               ...questions.slice(questionIndex() + 1),
                             ]
                           )
@@ -111,17 +111,19 @@ export const SurveySections = () => {
                   <label>
                     Question Type:
                     <Select
-                      options={["radio", "checkbox", "date", "text"].map(
-                        (o) => ({ label: o, value: o })
-                      )}
+                      options={(
+                        ["radio", "checkbox", "date", "text"] as const
+                      ).map((o) => ({ label: o, value: o }))}
                       value={question.type}
                       onChange={(value) =>
+                        value &&
                         setSurveyStore(
                           "sections",
                           index(),
                           "questions",
                           questionIndex(),
-                          DEFAULT_QUESTION[value as "date"]()
+                          "type",
+                          value
                         )
                       }
                     />
@@ -132,14 +134,14 @@ export const SurveySections = () => {
                         <label>
                           Question:
                           <Input
-                            value={question().input.question}
+                            value={question().textInput.question}
                             onInput={(value) => {
                               setSurveyStore(
                                 "sections",
                                 index(),
                                 "questions",
                                 questionIndex(),
-                                "input",
+                                "textInput",
                                 "question",
                                 value
                               );
@@ -154,21 +156,21 @@ export const SurveySections = () => {
                           <label>
                             Question:
                             <Input
-                              value={question().input.question}
+                              value={question().radioInput.question}
                               onInput={(value) => {
                                 setSurveyStore(
                                   "sections",
                                   index(),
                                   "questions",
                                   questionIndex(),
-                                  "input",
+                                  "radioInput",
                                   "question",
                                   value
                                 );
                               }}
                             />
                           </label>
-                          <For each={question().input.options}>
+                          <For each={question().radioInput.options}>
                             {(option, optionIndex) => (
                               <label>
                                 Option {optionIndex() + 1}:
@@ -177,20 +179,12 @@ export const SurveySections = () => {
                                     class="w-80"
                                     value={option.text}
                                     onInput={(value) => {
-                                      setSurveyStore<
-                                        any,
-                                        any,
-                                        any,
-                                        any,
-                                        any,
-                                        any,
-                                        any
-                                      >(
+                                      setSurveyStore(
                                         "sections",
                                         index(),
                                         "questions",
                                         questionIndex(),
-                                        "input",
+                                        "radioInput",
                                         "options",
                                         optionIndex(),
                                         "text",
@@ -202,27 +196,20 @@ export const SurveySections = () => {
                                     variant="outline"
                                     size="icon"
                                     onClick={() =>
-                                      setSurveyStore<
-                                        any,
-                                        any,
-                                        any,
-                                        any,
-                                        any,
-                                        any
-                                      >(
+                                      setSurveyStore(
                                         "sections",
                                         index(),
                                         "questions",
                                         questionIndex(),
-                                        "input",
+                                        "radioInput",
                                         "options",
                                         [
-                                          ...question().input.options.slice(
+                                          ...question().radioInput.options.slice(
                                             0,
                                             optionIndex() + 1
                                           ),
                                           { id: String(Date.now()), text: "" },
-                                          ...question().input.options.slice(
+                                          ...question().radioInput.options.slice(
                                             optionIndex() + 1
                                           ),
                                         ]
@@ -231,47 +218,33 @@ export const SurveySections = () => {
                                   >
                                     <HiOutlinePlus />
                                   </Button>
-                                  {question().input.options.length > 1 && (
+                                  {question().radioInput.options.length > 1 && (
                                     <Button
                                       variant="outline"
                                       size="icon"
                                       onClick={() => {
                                         if (
-                                          question().input.defaultOptionId ===
-                                          option.id
+                                          question().radioInput
+                                            .defaultOptionId === option.id
                                         ) {
-                                          setSurveyStore<
-                                            any,
-                                            any,
-                                            any,
-                                            any,
-                                            any,
-                                            any
-                                          >(
+                                          setSurveyStore(
                                             "sections",
                                             index(),
                                             "questions",
                                             questionIndex(),
-                                            "input",
+                                            "radioInput",
                                             "defaultOptionId",
                                             null
                                           );
                                         }
-                                        setSurveyStore<
-                                          any,
-                                          any,
-                                          any,
-                                          any,
-                                          any,
-                                          any
-                                        >(
+                                        setSurveyStore(
                                           "sections",
                                           index(),
                                           "questions",
                                           questionIndex(),
-                                          "input",
+                                          "radioInput",
                                           "options",
-                                          (prev: unknown[]) =>
+                                          (prev) =>
                                             prev.filter(
                                               (_, i) => i !== optionIndex()
                                             )
@@ -288,24 +261,26 @@ export const SurveySections = () => {
                           <label>
                             Default Option:
                             <Select
-                              options={question().input.options.map((o) => ({
-                                label: o.text,
-                                value: o.id,
-                              }))}
+                              options={question().radioInput.options.map(
+                                (o) => ({
+                                  label: o.text,
+                                  value: o.id,
+                                })
+                              )}
                               placeholder="Select default option"
                               onChange={(value) =>
-                                setSurveyStore<any, any, any, any, any, any>(
+                                setSurveyStore(
                                   "sections",
                                   index(),
                                   "questions",
                                   questionIndex(),
-                                  "input",
+                                  "radioInput",
                                   "defaultOptionId",
                                   value
                                 )
                               }
                               allowClear
-                              value={question().input.defaultOptionId}
+                              value={question().radioInput.defaultOptionId}
                             />
                           </label>
                         </div>

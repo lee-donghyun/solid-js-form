@@ -1,32 +1,20 @@
 export interface TextQuestion {
-  type: "text";
-  input: {
-    question: string;
-  };
+  question: string;
 }
 
 export interface RadioQuestion {
-  type: "radio";
-  input: {
-    question: string;
-    options: { text: string; id: string }[];
-    defaultOptionId: string | null;
-  };
+  question: string;
+  options: { text: string; id: string }[];
+  defaultOptionId: string | null;
 }
 
 export interface CheckboxQuestion {
-  type: "checkbox";
-  input: {
-    question: string;
-    options: { text: string; id: string; specificity: "기타" | null }[];
-  };
+  question: string;
+  options: { text: string; id: string; specificity: "기타" | null }[];
 }
 
 export interface DateQuestion {
-  type: "date";
-  input: {
-    question: string;
-  };
+  question: string;
 }
 
 export interface SurveyForm {
@@ -37,11 +25,12 @@ export interface SurveyForm {
   sections: {
     title: string;
     description: string;
-    questions: (
-      | TextQuestion
-      | RadioQuestion
-      | CheckboxQuestion
-      | DateQuestion
-    )[];
+    questions: {
+      type: "radio" | "checkbox" | "date" | "text";
+      radioInput: RadioQuestion;
+      checkboxInput: CheckboxQuestion;
+      dateInput: DateQuestion;
+      textInput: TextQuestion;
+    }[];
   }[];
 }
