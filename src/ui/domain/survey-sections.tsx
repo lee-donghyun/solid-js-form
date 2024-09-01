@@ -164,7 +164,7 @@ export const SurveySections = () => {
                                   >
                                     +
                                   </Button>
-                                  {question().input.options.length > 0 && (
+                                  {question().input.options.length > 1 && (
                                     <Button
                                       variant="outline"
                                       size="sm"
