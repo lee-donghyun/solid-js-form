@@ -30,21 +30,14 @@ const getDefaultTextInput = (): TextQuestion => ({
   _type: "text",
 });
 
-export const DEFAULT_QUESTION = {
-  radio: getDefaultRadioInput,
-  checkbox: getDefaultCheckboxInput,
-  date: getDefaultDateInput,
-  text: getDefaultTextInput,
-};
-
 export const getDefaultQuestion = (
   type: SurveyForm["sections"][number]["questions"][number]["type"]
 ): SurveyForm["sections"][number]["questions"][number] => ({
   type,
-  radioInput: DEFAULT_QUESTION.radio(),
-  checkboxInput: DEFAULT_QUESTION.checkbox(),
-  dateInput: DEFAULT_QUESTION.date(),
-  textInput: DEFAULT_QUESTION.text(),
+  radioInput: getDefaultRadioInput(),
+  checkboxInput: getDefaultCheckboxInput(),
+  dateInput: getDefaultDateInput(),
+  textInput: getDefaultTextInput(),
 });
 
 export const getDefaultSection = (): SurveyForm["sections"][number] => ({

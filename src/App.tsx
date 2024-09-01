@@ -6,6 +6,7 @@ import { Header } from "./ui/layout/header";
 import { SurveyForm } from "domain/survey/type";
 import { SurveyFormContext } from "domain/survey/context";
 import { SurveyFormSchema } from "domain/survey/validator";
+import { Button } from "ui/component/base/button";
 
 export const App = () => {
   const surveyForm = createForm<SurveyForm>({
@@ -25,7 +26,9 @@ export const App = () => {
           <Form onSubmit={console.log}>
             <SurveyInfo />
             <SurveySections />
-            <button>sd</button>
+            <div class="py-10">
+              <Button type="submit">Submit</Button>
+            </div>
           </Form>
         </SurveyFormContext.Provider>
       </main>
