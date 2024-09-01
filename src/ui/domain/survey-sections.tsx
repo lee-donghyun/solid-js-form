@@ -4,7 +4,7 @@ import {
   setSurveyStore,
   getDefaultSection,
   getDefaultQuestion,
-} from "../../domain/survey/store";
+} from "../../domain/survey/generator";
 import { Select } from "ui/component/select";
 import { Input } from "ui/component/input";
 import { Button } from "ui/component/base/button";
