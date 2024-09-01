@@ -141,7 +141,6 @@ export const SurveySections = () => {
                                         any,
                                         any,
                                         any,
-                                        any,
                                         any
                                       >(
                                         "sections",
@@ -150,11 +149,16 @@ export const SurveySections = () => {
                                         questionIndex(),
                                         "input",
                                         "options",
-                                        optionIndex() + 1,
-                                        {
-                                          text: "",
-                                          id: Date.now().toString(),
-                                        }
+                                        [
+                                          ...question().input.options.slice(
+                                            0,
+                                            optionIndex() + 1
+                                          ),
+                                          { id: String(Date.now()), text: "" },
+                                          ...question().input.options.slice(
+                                            optionIndex() + 1
+                                          ),
+                                        ]
                                       )
                                     }
                                   >
