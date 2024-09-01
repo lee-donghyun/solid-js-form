@@ -11,19 +11,23 @@ const getDefaultRadioInput = (): RadioQuestion => ({
   question: "",
   options: [{ text: "1", id: "1" }],
   defaultOptionId: null,
+  _type: "radio",
 });
 
 const getDefaultCheckboxInput = (): CheckboxQuestion => ({
   question: "",
   options: [{ text: "1", id: "1", specificity: null }],
+  _type: "checkbox",
 });
 
 const getDefaultDateInput = (): DateQuestion => ({
   question: "",
+  _type: "date",
 });
 
 const getDefaultTextInput = (): TextQuestion => ({
   question: "",
+  _type: "text",
 });
 
 export const DEFAULT_QUESTION = {

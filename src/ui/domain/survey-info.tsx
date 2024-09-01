@@ -2,7 +2,7 @@ import { DatePicker } from "ui/component/date-picker";
 import { Input } from "ui/component/input";
 import { useContext } from "solid-js";
 import { SurveyFormContext } from "domain/survey/context";
-import { email, maxLength, required, setValue } from "@modular-forms/solid";
+import { setValue } from "@modular-forms/solid";
 import { ErrorMessage } from "ui/component/error-message";
 
 export const SurveyInfo = () => {
@@ -13,10 +13,7 @@ export const SurveyInfo = () => {
       <h3>개인정보</h3>
       <label for="fname">
         First name:
-        <Field
-          name="fname"
-          validate={maxLength(10, "10자 이하로 입력해주세요.")}
-        >
+        <Field name="fname">
           {(field) => (
             <div>
               <Input
@@ -30,10 +27,7 @@ export const SurveyInfo = () => {
       </label>
       <label for="lname">
         Last name:
-        <Field
-          name="lname"
-          validate={maxLength(10, "10자 이하로 입력해주세요.")}
-        >
+        <Field name="lname">
           {(field) => (
             <div>
               <Input
@@ -47,7 +41,7 @@ export const SurveyInfo = () => {
       </label>
       <label for="email">
         Email:
-        <Field name="email" validate={email("이메일 형식이 아닙니다.")}>
+        <Field name="email">
           {(field) => (
             <div>
               <Input
@@ -62,7 +56,7 @@ export const SurveyInfo = () => {
       </label>
       <label for="birthday">
         Birthday:
-        <Field name="birthday" validate={required("반드시 입력해주세요.")}>
+        <Field name="birthday">
           {(field) => (
             <div>
               <DatePicker

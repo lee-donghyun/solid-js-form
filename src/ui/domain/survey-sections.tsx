@@ -280,7 +280,9 @@ export const SurveySections = () => {
                                 )
                               }
                               allowClear
-                              value={question().radioInput.defaultOptionId}
+                              value={
+                                question().radioInput.defaultOptionId ?? null
+                              }
                             />
                           </label>
                         </div>
