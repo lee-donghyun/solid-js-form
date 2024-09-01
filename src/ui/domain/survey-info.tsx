@@ -30,7 +30,10 @@ export const SurveyInfo = () => {
       </label>
       <label for="birthday">
         Birthday:
-        <DatePicker value={surveyStore.birthday} onInput={console.log} />
+        <DatePicker
+          value={surveyStore.birthday}
+          onInput={(date) => setSurveyStore("birthday", date)}
+        />
       </label>
     </div>
   );

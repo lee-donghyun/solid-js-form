@@ -235,7 +235,9 @@ export const DatePickerContent = (props: DatePickerContentProps) => {
   );
 };
 
-export const DatePickerInput = (props: DatePickerInputProps) => {
+export const DatePickerInput = (
+  props: DatePickerInputProps & { allowClear?: boolean }
+) => {
   const [local, rest] = splitProps(props, ["class", "children"]);
 
   return (

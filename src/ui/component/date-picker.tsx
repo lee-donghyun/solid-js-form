@@ -20,7 +20,7 @@ import { Portal } from "solid-js/web";
 
 interface DatePickerProps {
   value: string | null;
-  onInput: (value: string | null) => void;
+  onInput: (value: string) => void;
 }
 
 export const DatePicker = (props: DatePickerProps) => {
@@ -33,7 +33,7 @@ export const DatePicker = (props: DatePickerProps) => {
       }
       value={props.value ? [props.value] : []}
       onValueChange={({ value: [date] }) =>
-        props.onInput(date ? date.toString() : null)
+        date && props.onInput(date.toString())
       }
     >
       <DatePickerInput />
