@@ -4,7 +4,7 @@
     "config": "tailwind.config.js",
     "css": {
       "path": "src/index.css",
-      "variable": false
+      "variable": true
     },
     "color": "neutral",
     "prefix": ""
