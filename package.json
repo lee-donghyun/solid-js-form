@@ -18,7 +18,8 @@
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.20",
     "tailwind-merge": "^2.5.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",

@@ -1,36 +1,18 @@
-export type TextQuestion = {
-  question: string;
-};
+import { z } from "zod";
+import {
+  CheckboxQuestionSchema,
+  DateQuestionSchema,
+  RadioQuestionSchema,
+  SurveyFormSchema,
+  TextQuestionSchema,
+} from "./validator";
 
-export type RadioQuestion = {
-  question: string;
-  options: { text: string; id: string }[];
-  defaultOptionId: string | null;
-};
+export type TextQuestion = z.infer<typeof TextQuestionSchema>;
 
-export type CheckboxQuestion = {
-  question: string;
-  options: { text: string; id: string; specificity: "기타" | null }[];
-};
+export type RadioQuestion = z.infer<typeof RadioQuestionSchema>;
 
-export type DateQuestion = {
-  question: string;
-};
+export type CheckboxQuestion = z.infer<typeof CheckboxQuestionSchema>;
 
-export type SurveyForm = {
-  fname: string;
-  lname: string;
-  email: string;
-  birthday: string;
-  sections: {
-    title: string;
-    description: string;
-    questions: {
-      type: "radio" | "checkbox" | "date" | "text";
-      radioInput: RadioQuestion;
-      checkboxInput: CheckboxQuestion;
-      dateInput: DateQuestion;
-      textInput: TextQuestion;
-    }[];
-  }[];
-};
+export type DateQuestion = z.infer<typeof DateQuestionSchema>;
+
+export type SurveyForm = z.infer<typeof SurveyFormSchema>;
