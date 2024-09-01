@@ -22,7 +22,7 @@ export const Select = <V extends string>(props: SelectProps<V>) => {
       options={props.options.map((o) => o.value)}
       onChange={(v) => props.onChange(v)}
       value={props.value}
-      placeholder={props.placeholder}
+      placeholder={<span class="opacity-50">{props.placeholder}</span>}
       itemComponent={(itemProps) => (
         <SelectItem item={itemProps.item}>
           {labelMap().get(itemProps.item.rawValue)}

@@ -7,6 +7,7 @@ import {
 import { Select } from "ui/component/select";
 import { Input } from "ui/component/input";
 import { Button } from "ui/component/base/button";
+import { HiOutlineMinus, HiOutlinePlus } from "solid-icons/hi";
 
 export const SurveySections = () => {
   return (
@@ -38,8 +39,44 @@ export const SurveySections = () => {
             <For each={item.questions}>
               {(question, questionIndex) => (
                 <div>
-                  <h4 class="text-xl mt-5 mb-3">
+                  <h4 class="text-xl mt-8 mb-3 flex justify-between">
                     Question {questionIndex() + 1}:
+                    <div class="flex gap-3">
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        onClick={() =>
+                          setSurveyStore(
+                            "sections",
+                            index(),
+                            "questions",
+                            (questions) => [
+                              ...questions.slice(0, questionIndex() + 1),
+                              DEFAULT_QUESTION["radio"](),
+                              ...questions.slice(questionIndex() + 1),
+                            ]
+                          )
+                        }
+                      >
+                        <HiOutlinePlus />
+                      </Button>
+                      <Button
+                        size="icon"
+                        disabled={item.questions.length === 1}
+                        variant="outline"
+                        onClick={() =>
+                          setSurveyStore(
+                            "sections",
+                            index(),
+                            "questions",
+                            (prev) =>
+                              prev.filter((_, i) => i !== questionIndex())
+                          )
+                        }
+                      >
+                        <HiOutlineMinus />
+                      </Button>
+                    </div>
                   </h4>
                   <label>
                     Question Type:
@@ -133,7 +170,7 @@ export const SurveySections = () => {
                                   />
                                   <Button
                                     variant="outline"
-                                    size="sm"
+                                    size="icon"
                                     onClick={() =>
                                       setSurveyStore<
                                         any,
@@ -162,12 +199,12 @@ export const SurveySections = () => {
                                       )
                                     }
                                   >
-                                    +
+                                    <HiOutlinePlus />
                                   </Button>
                                   {question().input.options.length > 1 && (
                                     <Button
                                       variant="outline"
-                                      size="sm"
+                                      size="icon"
                                       onClick={() => {
                                         if (
                                           question().input.defaultOptionId ===
@@ -211,7 +248,7 @@ export const SurveySections = () => {
                                         );
                                       }}
                                     >
-                                      -
+                                      <HiOutlineMinus />
                                     </Button>
                                   )}
                                 </div>
@@ -225,6 +262,7 @@ export const SurveySections = () => {
                                 label: o.text,
                                 value: o.id,
                               }))}
+                              placeholder="Select default option"
                               onChange={(value) =>
                                 setSurveyStore<any, any, any, any, any, any>(
                                   "sections",
