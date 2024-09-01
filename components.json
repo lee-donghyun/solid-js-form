@@ -11,6 +11,7 @@
   },
   "alias": {
     "component": "ui/component",
-    "cn": "service/util/cn"
+    "cn": "service/util/cn",
+    "ui": "ui/component/base"
   }
 }

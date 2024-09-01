@@ -1,9 +1,10 @@
-import { createEffect, For, Match, Switch } from "solid-js";
+import { For, Match, Switch } from "solid-js";
 import {
   surveyStore,
   setSurveyStore,
   DEFAULT_QUESTION,
 } from "../../domain/survey/store";
+import { Select } from "ui/component/select";
 
 export const SurveySections = () => {
   return (
@@ -226,7 +227,26 @@ export const SurveySections = () => {
                           </For>
                           <label>
                             Default Option:
-                            <select
+                            <Select
+                              options={question().input.options.map((o) => ({
+                                label: o.text,
+                                value: o.id,
+                              }))}
+                              onChange={(value) =>
+                                setSurveyStore<any, any, any, any, any, any>(
+                                  "sections",
+                                  index(),
+                                  "questions",
+                                  questionIndex(),
+                                  "input",
+                                  "defaultOptionId",
+                                  value
+                                )
+                              }
+                              allowClear
+                              value={question().input.defaultOptionId}
+                            />
+                            {/* <select
                               value={
                                 question().input.defaultOptionId ?? undefined
                               }
@@ -247,7 +267,7 @@ export const SurveySections = () => {
                                   <option value={item.id}>{item.text}</option>
                                 )}
                               </For>
-                            </select>
+                            </select> */}
                           </label>
                         </div>
                       )}
