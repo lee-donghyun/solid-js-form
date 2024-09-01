@@ -1,23 +1,23 @@
-export interface TextQuestion {
+export type TextQuestion = {
   question: string;
-}
+};
 
-export interface RadioQuestion {
+export type RadioQuestion = {
   question: string;
   options: { text: string; id: string }[];
   defaultOptionId: string | null;
-}
+};
 
-export interface CheckboxQuestion {
+export type CheckboxQuestion = {
   question: string;
   options: { text: string; id: string; specificity: "기타" | null }[];
-}
+};
 
-export interface DateQuestion {
+export type DateQuestion = {
   question: string;
-}
+};
 
-export interface SurveyForm {
+export type SurveyForm = {
   fname: string;
   lname: string;
   email: string;
@@ -33,4 +33,4 @@ export interface SurveyForm {
       textInput: TextQuestion;
     }[];
   }[];
-}
+};
