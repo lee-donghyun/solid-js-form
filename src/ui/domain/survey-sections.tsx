@@ -1,4 +1,4 @@
-import { For, Match, Switch, useContext } from "solid-js";
+import { createEffect, For, Match, Switch, useContext } from "solid-js";
 import {
   getDefaultSection,
   getDefaultQuestion,
@@ -8,12 +8,20 @@ import { Input } from "ui/component/input";
 import { Button } from "ui/component/base/button";
 import { HiOutlineMinus, HiOutlinePlus } from "solid-icons/hi";
 import { SurveyFormContext } from "domain/survey/context";
-import { getValue, insert, remove, setValue } from "@modular-forms/solid";
+import {
+  getValue,
+  getValues,
+  insert,
+  remove,
+  setValue,
+} from "@modular-forms/solid";
 import { ErrorMessage } from "ui/component/error-message";
 
 export const SurveySections = () => {
   const [form, { Field, FieldArray }] = useContext(SurveyFormContext)!;
-
+  createEffect(() => {
+    console.log(getValues(form));
+  });
   return (
     <div class="styled">
       <h3>Section</h3>
@@ -123,173 +131,192 @@ export const SurveySections = () => {
                           </h4>
                           <label>
                             Question Type:
-                            <Select
-                              options={(
-                                ["radio", "checkbox", "date", "text"] as const
-                              ).map((o) => ({ label: o, value: o }))}
-                              value={
-                                getValue(
-                                  form,
-                                  `sections.${sectionIndex()}.questions.${questionIndex()}.type`
-                                ) ?? "text"
-                              }
-                              onChange={(value) =>
-                                value &&
-                                setValue(
-                                  form,
-                                  `sections.${sectionIndex()}.questions.${questionIndex()}.type`,
-                                  value
-                                )
-                              }
-                            />
+                            <Field
+                              name={`sections.${sectionIndex()}.questions.${questionIndex()}.type`}
+                            >
+                              {(field, props) => (
+                                <Select
+                                  options={(
+                                    [
+                                      "radio",
+                                      "checkbox",
+                                      "date",
+                                      "text",
+                                    ] as const
+                                  ).map((o) => ({ label: o, value: o }))}
+                                  value={field.value ?? "text"}
+                                  onChange={(value) =>
+                                    value && setValue(form, props.name, value)
+                                  }
+                                />
+                              )}
+                            </Field>
                           </label>
-                          {/* <Switch fallback={<div>Unknown question type</div>}>
+                          <Switch fallback={<div>Unknown question type</div>}>
                             <Match
                               when={
                                 getValue(
                                   form,
                                   `sections.${sectionIndex()}.questions.${questionIndex()}.type`
                                 ) === "text"
-                                  ? question
-                                  : null
                               }
                             >
-                              {(question) => (
-                                <label>
-                                  Question:
-                                  <Input
-                                    value={
-                                      question()?.textInput?.question ?? ""
-                                    }
-                                    onInput={(value) => {
-                                      setValue(
-                                        form,
-                                        `sections.${sectionIndex()}.questions.${questionIndex()}.textInput.question`,
-                                        value
-                                      );
-                                    }}
-                                  />
-                                </label>
-                              )}
+                              <label>
+                                Question:
+                                <Field
+                                  name={`sections.${sectionIndex()}.questions.${questionIndex()}.textInput.question`}
+                                >
+                                  {(field, props) => (
+                                    <Input
+                                      value={field.value ?? ""}
+                                      onInput={(value) => {
+                                        setValue(form, props.name, value);
+                                      }}
+                                    />
+                                  )}
+                                </Field>
+                              </label>
                             </Match>
                             <Match
                               when={
-                                question?.type === "radio" ? question : null
+                                getValue(
+                                  form,
+                                  `sections.${sectionIndex()}.questions.${questionIndex()}.type`
+                                ) === "radio"
                               }
                             >
-                              {(question) => (
-                                <div>
-                                  <label>
-                                    Question:
-                                    <Input
-                                      value={
-                                        question()?.radioInput?.question ?? ""
-                                      }
-                                      onInput={(value) =>
-                                        setValue(
-                                          form,
-                                          `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.question`,
-                                          value
-                                        )
-                                      }
-                                    />
-                                  </label>
-                                  <For each={question().radioInput?.options}>
-                                    {(option, optionIndex) => (
-                                      <label>
-                                        Option {optionIndex() + 1}:
-                                        <div class="flex gap-2">
-                                          <Input
-                                            class="w-80"
-                                            value={option?.text ?? ""}
-                                            onInput={(value) => {
-                                              setValue(
-                                                form,
-                                                `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.text`,
-                                                value
-                                              );
-                                            }}
-                                          />
-                                          <Button
-                                            variant="outline"
-                                            size="icon"
-                                            onClick={() =>
-                                              insert(
-                                                form,
-                                                `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`,
-                                                {
-                                                  value: {
-                                                    id: String(Date.now()),
-                                                    text: "",
-                                                  },
-                                                }
-                                              )
-                                            }
-                                          >
-                                            <HiOutlinePlus />
-                                          </Button>
-                                          {(question()?.radioInput?.options
-                                            ?.length ?? 0) > 1 && (
+                              <div>
+                                <label>
+                                  Question:
+                                  <Field
+                                    name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.question`}
+                                  >
+                                    {(field, props) => (
+                                      <Input
+                                        value={field.value ?? ""}
+                                        onInput={(value) => {
+                                          setValue(form, props.name, value);
+                                        }}
+                                      />
+                                    )}
+                                  </Field>
+                                </label>
+                                <FieldArray
+                                  name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`}
+                                >
+                                  {(optionField) => (
+                                    <For each={optionField.items}>
+                                      {(_, optionIndex) => (
+                                        <label>
+                                          Option {optionIndex() + 1}:
+                                          <div class="flex gap-2">
+                                            <Field
+                                              name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.text`}
+                                            >
+                                              {(field, props) => (
+                                                <Input
+                                                  class="w-80"
+                                                  value={field.value ?? ""}
+                                                  onInput={(value) => {
+                                                    setValue(
+                                                      form,
+                                                      props.name,
+                                                      value
+                                                    );
+                                                  }}
+                                                />
+                                              )}
+                                            </Field>
                                             <Button
                                               variant="outline"
                                               size="icon"
-                                              onClick={() => {
-                                                if (
-                                                  question()?.radioInput
-                                                    ?.defaultOptionId ===
-                                                  option?.id
-                                                ) {
-                                                  setValue(
-                                                    form,
-                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`,
-                                                    null
-                                                  );
-                                                }
-                                                remove(
+                                              onClick={() =>
+                                                insert(
                                                   form,
                                                   `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`,
-                                                  { at: optionIndex() }
-                                                );
-                                              }}
+                                                  {
+                                                    value: {
+                                                      id: String(Date.now()),
+                                                      text: "",
+                                                    },
+                                                    at: optionIndex() + 1,
+                                                  }
+                                                )
+                                              }
                                             >
-                                              <HiOutlineMinus />
+                                              <HiOutlinePlus />
                                             </Button>
-                                          )}
-                                        </div>
-                                      </label>
+                                            {optionField.items.length > 1 && (
+                                              <Button
+                                                variant="outline"
+                                                size="icon"
+                                                onClick={() => {
+                                                  if (
+                                                    getValue(
+                                                      form,
+                                                      `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`
+                                                    ) ===
+                                                    getValue(
+                                                      form,
+                                                      `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.id`
+                                                    )
+                                                  ) {
+                                                    setValue(
+                                                      form,
+                                                      `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`,
+                                                      null
+                                                    );
+                                                  }
+                                                  remove(
+                                                    form,
+                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`,
+                                                    { at: optionIndex() }
+                                                  );
+                                                }}
+                                              >
+                                                <HiOutlineMinus />
+                                              </Button>
+                                            )}
+                                          </div>
+                                        </label>
+                                      )}
+                                    </For>
+                                  )}
+                                </FieldArray>
+                                <label>
+                                  Default Option:
+                                  <Field
+                                    name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`}
+                                  >
+                                    {(field, props) => (
+                                      <Select
+                                        options={
+                                          getValues(
+                                            form,
+                                            `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`
+                                          )?.map((o, i) => {
+                                            console.log({ o, i });
+
+                                            return {
+                                              label: o?.text ?? "",
+                                              value: o?.id ?? "",
+                                            };
+                                          }) ?? []
+                                        }
+                                        placeholder="Select default option"
+                                        onChange={(value) =>
+                                          value &&
+                                          setValue(form, props.name, value)
+                                        }
+                                        allowClear
+                                        value={field.value ?? null}
+                                      />
                                     )}
-                                  </For>
-                                  <label>
-                                    Default Option:
-                                    <Select
-                                      options={
-                                        question()?.radioInput?.options?.map(
-                                          (o) => ({
-                                            label: o?.text ?? " ",
-                                            value: o?.id ?? "",
-                                          })
-                                        ) ?? []
-                                      }
-                                      placeholder="Select default option"
-                                      onChange={(value) =>
-                                        value &&
-                                        setValue(
-                                          form,
-                                          `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`,
-                                          value
-                                        )
-                                      }
-                                      allowClear
-                                      value={
-                                        question()?.radioInput
-                                          ?.defaultOptionId ?? null
-                                      }
-                                    />
-                                  </label>
-                                </div>
-                              )}
+                                  </Field>
+                                </label>
+                              </div>
                             </Match>
-                          </Switch> */}
+                          </Switch>
                         </div>
                       )}
                     </For>
