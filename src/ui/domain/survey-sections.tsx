@@ -5,6 +5,8 @@ import {
   DEFAULT_QUESTION,
 } from "../../domain/survey/store";
 import { Select } from "ui/component/select";
+import { Input } from "ui/component/input";
+import { Button } from "ui/component/base/button";
 
 export const SurveySections = () => {
   return (
@@ -17,22 +19,18 @@ export const SurveySections = () => {
             <h5 class="text-xl mb-3">Setting:</h5>
             <label>
               Title:
-              <input
-                type="text"
-                name={`section-title-${index()}`}
+              <Input
                 value={item.title}
-                onInput={({ target: { value } }) => {
+                onInput={(value) => {
                   setSurveyStore("sections", index(), "title", value);
                 }}
               />
             </label>
             <label>
               Description:
-              <input
-                type="text"
-                name={`section-description-${index()}`}
+              <Input
                 value={item.description}
-                onInput={({ target: { value } }) => {
+                onInput={(value) => {
                   setSurveyStore("sections", index(), "description", value);
                 }}
               />
@@ -45,36 +43,30 @@ export const SurveySections = () => {
                   </h4>
                   <label>
                     Question Type:
-                    <select
-                      name={`question-${questionIndex()}-type`}
+                    <Select
+                      options={["radio", "checkbox", "date", "text"].map(
+                        (o) => ({ label: o, value: o })
+                      )}
                       value={question.type}
-                      onChange={({ target: { value } }) => {
+                      onChange={(value) =>
                         setSurveyStore(
                           "sections",
                           index(),
                           "questions",
                           questionIndex(),
                           DEFAULT_QUESTION[value as "date"]()
-                        );
-                      }}
-                    >
-                      {["radio", "checkbox", "date", "text"].map((type) => (
-                        <option value={type} selected={question.type === type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
+                        )
+                      }
+                    />
                   </label>
                   <Switch fallback={<div>Unknown question type</div>}>
                     <Match when={question.type === "text" ? question : null}>
                       {(question) => (
                         <label>
                           Question:
-                          <input
-                            type="text"
-                            name={`question-${questionIndex()}`}
+                          <Input
                             value={question().input.question}
-                            onInput={({ target: { value } }) => {
+                            onInput={(value) => {
                               setSurveyStore(
                                 "sections",
                                 index(),
@@ -94,11 +86,9 @@ export const SurveySections = () => {
                         <div>
                           <label>
                             Question:
-                            <input
-                              type="text"
-                              name={`question-${questionIndex()}`}
+                            <Input
                               value={question().input.question}
-                              onInput={({ target: { value } }) => {
+                              onInput={(value) => {
                                 setSurveyStore(
                                   "sections",
                                   index(),
@@ -116,12 +106,10 @@ export const SurveySections = () => {
                               <label>
                                 Option {optionIndex() + 1}:
                                 <div class="flex gap-2">
-                                  <input
-                                    type="text"
+                                  <Input
                                     class="w-80"
-                                    name={`option-${optionIndex()}`}
                                     value={option.text}
-                                    onInput={({ target: { value } }) => {
+                                    onInput={(value) => {
                                       setSurveyStore<
                                         any,
                                         any,
@@ -143,9 +131,9 @@ export const SurveySections = () => {
                                       );
                                     }}
                                   />
-
-                                  <button
-                                    class="px-2 border active:border-black"
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
                                     onClick={() =>
                                       setSurveyStore<
                                         any,
@@ -171,10 +159,11 @@ export const SurveySections = () => {
                                     }
                                   >
                                     +
-                                  </button>
+                                  </Button>
                                   {question().input.options.length > 0 && (
-                                    <button
-                                      class="px-2 border active:border-black"
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
                                       onClick={() => {
                                         if (
                                           question().input.defaultOptionId ===
@@ -219,7 +208,7 @@ export const SurveySections = () => {
                                       }}
                                     >
                                       -
-                                    </button>
+                                    </Button>
                                   )}
                                 </div>
                               </label>
@@ -246,28 +235,6 @@ export const SurveySections = () => {
                               allowClear
                               value={question().input.defaultOptionId}
                             />
-                            {/* <select
-                              value={
-                                question().input.defaultOptionId ?? undefined
-                              }
-                              onChange={({ target: { value } }) => {
-                                setSurveyStore<any, any, any, any, any, any>(
-                                  "sections",
-                                  index(),
-                                  "questions",
-                                  questionIndex(),
-                                  "input",
-                                  "defaultOptionId",
-                                  value
-                                );
-                              }}
-                            >
-                              <For each={question().input.options}>
-                                {(item) => (
-                                  <option value={item.id}>{item.text}</option>
-                                )}
-                              </For>
-                            </select> */}
                           </label>
                         </div>
                       )}

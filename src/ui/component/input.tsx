@@ -6,6 +6,7 @@ interface InputProps {
   name?: string;
   onInput: (value: string) => void;
   value: string;
+  class?: string;
 }
 
 export const Input = (props: InputProps) => {
@@ -15,6 +16,7 @@ export const Input = (props: InputProps) => {
         type={props.type}
         id={props.id}
         name={props.name}
+        class={props.class}
         onInput={({ currentTarget: { value } }) => {
           props.onInput(value);
         }}
