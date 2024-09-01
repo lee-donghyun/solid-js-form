@@ -45,17 +45,17 @@ export const DEFAULT_QUESTION = {
   text: getDefaultTextInput,
 };
 
+export const getDefaultSection = () => ({
+  title: "",
+  description: "",
+  questions: [getDefaultRadioInput()],
+});
+
 export const getDefaultSurveyForm = (): SurveyForm => ({
   fname: "",
   lname: "",
   email: "",
-  sections: [
-    {
-      description: "",
-      questions: [getDefaultRadioInput()],
-      title: "",
-    },
-  ],
+  sections: [getDefaultSection()],
   birthday: "",
 });
 

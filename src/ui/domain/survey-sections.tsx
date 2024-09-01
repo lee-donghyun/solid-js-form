@@ -3,6 +3,7 @@ import {
   surveyStore,
   setSurveyStore,
   DEFAULT_QUESTION,
+  getDefaultSection,
 } from "../../domain/survey/store";
 import { Select } from "ui/component/select";
 import { Input } from "ui/component/input";
@@ -16,7 +17,36 @@ export const SurveySections = () => {
       <For each={surveyStore.sections}>
         {(item, index) => (
           <div>
-            <h4 class="text-2xl mt-8 mb-5">Section {index() + 1}:</h4>
+            <h4 class="text-2xl mt-16 mb-5 flex justify-between">
+              Section {index() + 1}:
+              <div class="flex gap-3">
+                <Button
+                  size="icon"
+                  variant="outline"
+                  onClick={() =>
+                    setSurveyStore("sections", (sections) => [
+                      ...sections.slice(0, index() + 1),
+                      getDefaultSection(),
+                      ...sections.slice(index() + 1),
+                    ])
+                  }
+                >
+                  <HiOutlinePlus />
+                </Button>
+                <Button
+                  size="icon"
+                  disabled={item.questions.length === 1}
+                  variant="outline"
+                  onClick={() =>
+                    setSurveyStore("sections", (sections) =>
+                      sections.filter((_, i) => i !== index())
+                    )
+                  }
+                >
+                  <HiOutlineMinus />
+                </Button>
+              </div>
+            </h4>
             <h5 class="text-xl mb-3">Setting:</h5>
             <label>
               Title:
