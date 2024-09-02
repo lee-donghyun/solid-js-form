@@ -10,8 +10,9 @@ import {
 import { SurveyFormContext } from "domain/survey/context";
 import { SurveyFormWithQuestion } from "domain/survey/type";
 import { HiOutlinePlus, HiOutlineMinus } from "solid-icons/hi";
-import { useContext, For } from "solid-js";
+import { useContext, For, Show } from "solid-js";
 import { Button } from "ui/component/base/button";
+import { Checkbox } from "ui/component/checkbox";
 import { Input } from "ui/component/input";
 import { Select } from "ui/component/select";
 
@@ -113,6 +114,45 @@ export const SurveyQuestionRadio = (props: SurveyQuestionRadioProps) => {
                   >
                     <HiOutlineMinus />
                   </Button>
+                  <Show
+                    when={
+                      getValue(
+                        form,
+                        `sections.${props.sectionIndex}.questions.${props.questionIndex}.type`
+                      ) === "radio-link"
+                    }
+                  >
+                    <>
+                      <Field<FieldPath<SurveyFormWithQuestion<"radio-link">>>
+                        name={`sections.${props.sectionIndex}.questions.${
+                          props.questionIndex
+                        }.radioLinkInput.options.${optionIndex()}.nextSectionId`}
+                      >
+                        {(field, fieldProps) => (
+                          <Select
+                            placeholder="next section"
+                            onChange={(value) =>
+                              setValue(
+                                form as FormStore<
+                                  SurveyFormWithQuestion<"radio-link">
+                                >,
+                                fieldProps.name,
+                                value
+                              )
+                            }
+                            options={getValues(form, "sections")
+                              .filter((_, i) => i !== props.sectionIndex)
+                              .map((s) => ({
+                                label: s?.title ?? "",
+                                value: s?.id ?? "",
+                              }))}
+                            allowClear
+                            value={field.value ?? null}
+                          />
+                        )}
+                      </Field>
+                    </>
+                  </Show>
                 </div>
               </label>
             )}
@@ -148,6 +188,25 @@ export const SurveyQuestionRadio = (props: SurveyQuestionRadioProps) => {
             />
           )}
         </Field>
+      </label>
+      <label>
+        Question Option:
+        <Checkbox
+          checked={
+            getValue(
+              form,
+              `sections.${props.sectionIndex}.questions.${props.questionIndex}.type`
+            ) === "radio-link"
+          }
+          label="문항 링크"
+          onChange={(checked) =>
+            setValue(
+              form,
+              `sections.${props.sectionIndex}.questions.${props.questionIndex}.type`,
+              checked ? "radio-link" : "radio"
+            )
+          }
+        />
       </label>
     </div>
   );

@@ -81,6 +81,7 @@ export const SurveyFormSchema = z.object({
   sections: z
     .array(
       z.object({
+        id: z.string(),
         title: z.string().min(1, "제목을 반드시 입력해주세요."),
         description: z.string().min(1, "설명을 반드시 입력해주세요."),
         questions: z

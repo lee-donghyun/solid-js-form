@@ -73,6 +73,7 @@ export const getDefaultQuestion = <
 
 export const getDefaultSection = (): SurveyForm["sections"][number] => ({
   title: "",
+  id: String(Date.now()),
   description: "",
   questions: [getDefaultQuestion("radio")],
 });

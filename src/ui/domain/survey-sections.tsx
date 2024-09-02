@@ -11,8 +11,10 @@ import { SurveyFormContext } from "domain/survey/context";
 import {
   FieldPath,
   getValue,
+  getValues,
   insert,
   remove,
+  reset,
   setValue,
 } from "@modular-forms/solid";
 import { SurveyFormWithQuestion } from "domain/survey/type";
@@ -46,9 +48,35 @@ export const SurveySections = () => {
                       size="icon"
                       disabled={sectionField.items.length === 1}
                       variant="outline"
-                      onClick={() =>
-                        remove(form, "sections", { at: sectionIndex() })
-                      }
+                      onClick={() => {
+                        const sections = getValues(form, "sections");
+                        sections?.forEach((section, index) => {
+                          section?.questions?.forEach((question, qIndex) => {
+                            if (!question) return;
+                            if (question.type === "radio-link") {
+                              question.radioLinkInput?.options?.forEach(
+                                (option, oIndex) => {
+                                  if (
+                                    option?.nextSectionId ===
+                                    sections[sectionIndex()]?.id
+                                  ) {
+                                    reset(
+                                      form,
+                                      `sections.${index}.questions.${qIndex}.radioLinkInput.options.${oIndex}.nextSectionId`
+                                    );
+                                    reset(
+                                      form,
+                                      `sections.${index}.questions.${qIndex}.radioLinkInput.options.${oIndex}.nextSectionQuestionId`
+                                    );
+                                  }
+                                }
+                              );
+                            }
+                          });
+                        });
+
+                        remove(form, "sections", { at: sectionIndex() });
+                      }}
                     >
                       <HiOutlineMinus />
                     </Button>
@@ -131,10 +159,12 @@ export const SurveySections = () => {
                                       "checkbox",
                                       "date",
                                       "text",
-                                      "radio-link",
                                     ] as const
                                   ).map((o) => ({ label: o, value: o }))}
-                                  value={field.value ?? "text"}
+                                  value={
+                                    (field.value?.split("-")[0] ??
+                                      "text") as "text"
+                                  }
                                   onChange={(value) =>
                                     value && setValue(form, props.name, value)
                                   }
@@ -169,12 +199,10 @@ export const SurveySections = () => {
                               </label>
                             </Match>
                             <Match
-                              when={
-                                getValue(
-                                  form,
-                                  `sections.${sectionIndex()}.questions.${questionIndex()}.type`
-                                ) === "radio"
-                              }
+                              when={getValue(
+                                form,
+                                `sections.${sectionIndex()}.questions.${questionIndex()}.type`
+                              )?.startsWith("radio")}
                             >
                               <SurveyQuestionRadio
                                 questionIndex={questionIndex()}
