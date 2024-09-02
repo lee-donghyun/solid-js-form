@@ -10,18 +10,16 @@ import { HiOutlineMinus, HiOutlinePlus } from "solid-icons/hi";
 import { SurveyFormContext } from "domain/survey/context";
 import {
   FieldPath,
-  FormStore,
   getValue,
-  getValues,
   insert,
   remove,
   setValue,
 } from "@modular-forms/solid";
 import { SurveyFormWithQuestion } from "domain/survey/type";
+import { SurveyQuestionRadio } from "./survey-question-radio";
 
 export const SurveySections = () => {
-  const [form, { Field, FieldArray, HiddenField }] =
-    useContext(SurveyFormContext)!;
+  const [form, { Field, FieldArray }] = useContext(SurveyFormContext)!;
 
   return (
     <div class="styled">
@@ -96,9 +94,7 @@ export const SurveySections = () => {
                                   insert(
                                     form,
                                     `sections.${sectionIndex()}.questions`,
-                                    {
-                                      value: getDefaultQuestion("radio"),
-                                    }
+                                    { value: getDefaultQuestion("radio") }
                                   )
                                 }
                               >
@@ -135,6 +131,7 @@ export const SurveySections = () => {
                                       "checkbox",
                                       "date",
                                       "text",
+                                      "radio-link",
                                     ] as const
                                   ).map((o) => ({ label: o, value: o }))}
                                   value={field.value ?? "text"}
@@ -179,148 +176,10 @@ export const SurveySections = () => {
                                 ) === "radio"
                               }
                             >
-                              <div>
-                                <label>
-                                  Question:
-                                  <Field<
-                                    FieldPath<SurveyFormWithQuestion<"radio">>
-                                  >
-                                    name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.question`}
-                                  >
-                                    {(field, props) => (
-                                      <Input
-                                        {...props}
-                                        value={field.value ?? ""}
-                                        error={field.error}
-                                      />
-                                    )}
-                                  </Field>
-                                </label>
-                                <FieldArray
-                                  name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`}
-                                >
-                                  {(optionField) => (
-                                    <For each={optionField.items}>
-                                      {(_, optionIndex) => (
-                                        <label>
-                                          Option {optionIndex() + 1}:
-                                          <div class="flex gap-2">
-                                            <HiddenField
-                                              name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.id`}
-                                            />
-                                            <Field<
-                                              FieldPath<
-                                                SurveyFormWithQuestion<"radio">
-                                              >
-                                            >
-                                              name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.text`}
-                                            >
-                                              {(field, props) => (
-                                                <Input
-                                                  {...props}
-                                                  value={field.value ?? ""}
-                                                  error={field.error}
-                                                />
-                                              )}
-                                            </Field>
-                                            <Button
-                                              variant="outline"
-                                              size="icon"
-                                              onClick={() =>
-                                                insert(
-                                                  form as FormStore<
-                                                    SurveyFormWithQuestion<"radio">
-                                                  >,
-                                                  `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`,
-                                                  {
-                                                    value: {
-                                                      id: String(Date.now()),
-                                                      text: "",
-                                                    },
-                                                    at: optionIndex() + 1,
-                                                  }
-                                                )
-                                              }
-                                            >
-                                              <HiOutlinePlus />
-                                            </Button>
-                                            <Button
-                                              disabled={
-                                                optionField.items.length === 1
-                                              }
-                                              variant="outline"
-                                              size="icon"
-                                              onClick={() => {
-                                                if (
-                                                  getValue(
-                                                    form,
-                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`
-                                                  ) ===
-                                                  getValue(
-                                                    form,
-                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.id`
-                                                  )
-                                                ) {
-                                                  setValue(
-                                                    form as FormStore<
-                                                      SurveyFormWithQuestion<"radio">
-                                                    >,
-                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`,
-                                                    null
-                                                  );
-                                                }
-                                                remove(
-                                                  form,
-                                                  `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`,
-                                                  { at: optionIndex() }
-                                                );
-                                              }}
-                                            >
-                                              <HiOutlineMinus />
-                                            </Button>
-                                          </div>
-                                        </label>
-                                      )}
-                                    </For>
-                                  )}
-                                </FieldArray>
-                                <label>
-                                  Default Option:
-                                  <Field<
-                                    FieldPath<SurveyFormWithQuestion<"radio">>
-                                  >
-                                    name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`}
-                                  >
-                                    {(field, props) => (
-                                      <Select
-                                        options={
-                                          getValues(
-                                            form as FormStore<
-                                              SurveyFormWithQuestion<"radio">
-                                            >,
-                                            `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`
-                                          )?.map((o) => ({
-                                            label: o?.text ?? "",
-                                            value: o?.id ?? "",
-                                          })) ?? []
-                                        }
-                                        placeholder="Select default option"
-                                        onChange={(value) =>
-                                          setValue(
-                                            form as FormStore<
-                                              SurveyFormWithQuestion<"radio">
-                                            >,
-                                            props.name,
-                                            value
-                                          )
-                                        }
-                                        allowClear
-                                        value={field.value ?? null}
-                                      />
-                                    )}
-                                  </Field>
-                                </label>
-                              </div>
+                              <SurveyQuestionRadio
+                                questionIndex={questionIndex()}
+                                sectionIndex={sectionIndex()}
+                              />
                             </Match>
                           </Switch>
                         </div>

@@ -5,7 +5,9 @@ import {
   DateQuestion,
   TextQuestion,
   SurveyForm,
+  RadioLinkQuestion,
 } from "./type";
+import { FormStore, FormValues, PartialValues } from "@modular-forms/solid";
 
 const getDefaultRadioInput = (): RadioQuestion => ({
   radioInput: {
@@ -14,6 +16,24 @@ const getDefaultRadioInput = (): RadioQuestion => ({
     defaultOptionId: null,
   },
   type: "radio",
+});
+
+const getDefaultRadioLinkInput = (): PartialValues<
+  FormValues<FormStore<RadioLinkQuestion>>
+> => ({
+  radioLinkInput: {
+    question: "",
+    options: [
+      {
+        text: "1",
+        id: "1",
+        nextSectionId: undefined,
+        nextSectionQuestionId: undefined,
+      },
+    ],
+    defaultOptionId: null,
+  },
+  type: "radio-link",
 });
 
 const getDefaultCheckboxInput = (): CheckboxQuestion => ({
@@ -38,13 +58,16 @@ const getDefaultTextInput = (): TextQuestion => ({
   type: "text",
 });
 
-export const getDefaultQuestion = (
-  type: SurveyForm["sections"][number]["questions"][number]["type"]
-): SurveyForm["sections"][number]["questions"][number] => ({
+export const getDefaultQuestion = <
+  QuestionType extends SurveyForm["sections"][number]["questions"][number]["type"]
+>(
+  type: QuestionType
+) => ({
+  ...getDefaultTextInput(),
   ...getDefaultRadioInput(),
   ...getDefaultCheckboxInput(),
   ...getDefaultDateInput(),
-  ...getDefaultTextInput(),
+  ...getDefaultRadioLinkInput(),
   type,
 });
 

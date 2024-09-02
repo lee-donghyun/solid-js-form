@@ -11,9 +11,30 @@ export const RadioQuestionSchema = z.object({
         })
       )
       .min(1, "옵션을 최소 하나 이상 입력해주세요."),
-    defaultOptionId: z.string().nullable().optional(),
+    defaultOptionId: z.string().nullable(),
   }),
   type: z.literal("radio"),
+});
+export const RadioLinkQuestionSchema = z.object({
+  radioLinkInput: z.object({
+    question: z.string().min(1, "질문을 반드시 입력해주세요."),
+    options: z
+      .array(
+        z.object({
+          text: z.string().min(1, "옵션 텍스트를 반드시 입력해주세요."),
+          id: z.string().min(1, "옵션 ID를 반드시 입력해주세요."),
+          nextSectionId: z
+            .string()
+            .min(1, "다음 섹션 ID를 반드시 입력해주세요."),
+          nextSectionQuestionId: z
+            .string()
+            .min(1, "다음 섹션 질문 ID를 반드시 입력해주세요."),
+        })
+      )
+      .min(1, "옵션을 최소 하나 이상 입력해주세요."),
+    defaultOptionId: z.string().nullable(),
+  }),
+  type: z.literal("radio-link"),
 });
 
 export const CheckboxQuestionSchema = z.object({
@@ -69,6 +90,7 @@ export const SurveyFormSchema = z.object({
               CheckboxQuestionSchema,
               DateQuestionSchema,
               TextQuestionSchema,
+              RadioLinkQuestionSchema,
             ])
           )
           .min(1, "질문을 최소 하나 이상 추가해주세요."),
