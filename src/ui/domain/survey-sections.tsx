@@ -248,37 +248,38 @@ export const SurveySections = () => {
                                             >
                                               <HiOutlinePlus />
                                             </Button>
-                                            {optionField.items.length > 1 && (
-                                              <Button
-                                                variant="outline"
-                                                size="icon"
-                                                onClick={() => {
-                                                  if (
-                                                    getValue(
-                                                      form,
-                                                      `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`
-                                                    ) ===
-                                                    getValue(
-                                                      form,
-                                                      `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.id`
-                                                    )
-                                                  ) {
-                                                    setValue(
-                                                      form,
-                                                      `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`,
-                                                      null
-                                                    );
-                                                  }
-                                                  remove(
+                                            <Button
+                                              disabled={
+                                                optionField.items.length === 1
+                                              }
+                                              variant="outline"
+                                              size="icon"
+                                              onClick={() => {
+                                                if (
+                                                  getValue(
                                                     form,
-                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`,
-                                                    { at: optionIndex() }
+                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`
+                                                  ) ===
+                                                  getValue(
+                                                    form,
+                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.id`
+                                                  )
+                                                ) {
+                                                  setValue(
+                                                    form,
+                                                    `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`,
+                                                    null
                                                   );
-                                                }}
-                                              >
-                                                <HiOutlineMinus />
-                                              </Button>
-                                            )}
+                                                }
+                                                remove(
+                                                  form,
+                                                  `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`,
+                                                  { at: optionIndex() }
+                                                );
+                                              }}
+                                            >
+                                              <HiOutlineMinus />
+                                            </Button>
                                           </div>
                                         </label>
                                       )}
