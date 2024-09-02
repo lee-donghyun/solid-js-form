@@ -6,7 +6,7 @@ interface ErrorMessageProps {
 
 export const ErrorMessage = (props: ErrorMessageProps) => {
   return (
-    <Show when={props.message.length > 0}>
+    <Show when={props.message?.length > 0}>
       <div class="text-red-500 text-sm mt-1">{props.message}</div>
     </Show>
   );

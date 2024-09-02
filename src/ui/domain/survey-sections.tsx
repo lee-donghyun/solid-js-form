@@ -9,6 +9,7 @@ import { Button } from "ui/component/base/button";
 import { HiOutlineMinus, HiOutlinePlus } from "solid-icons/hi";
 import { SurveyFormContext } from "domain/survey/context";
 import {
+  FieldPath,
   FormStore,
   getValue,
   getValues,
@@ -16,7 +17,6 @@ import {
   remove,
   setValue,
 } from "@modular-forms/solid";
-import { ErrorMessage } from "ui/component/error-message";
 import { SurveyFormWithQuestion } from "domain/survey/type";
 
 export const SurveySections = () => {
@@ -61,15 +61,11 @@ export const SurveySections = () => {
                   Title:
                   <Field name={`sections.${sectionIndex()}.title`}>
                     {(field, props) => (
-                      <div>
-                        <Input
-                          value={field.value ?? ""}
-                          onInput={(value) => {
-                            setValue(form, props.name, value);
-                          }}
-                        />
-                        <ErrorMessage message={field.error} />
-                      </div>
+                      <Input
+                        {...props}
+                        value={field.value ?? ""}
+                        error={field.error}
+                      />
                     )}
                   </Field>
                 </label>
@@ -77,15 +73,11 @@ export const SurveySections = () => {
                   Description:
                   <Field name={`sections.${sectionIndex()}.description`}>
                     {(field, props) => (
-                      <div>
-                        <Input
-                          value={field.value ?? ""}
-                          onInput={(value) => {
-                            setValue(form, props.name, value);
-                          }}
-                        />
-                        <ErrorMessage message={field.error} />
-                      </div>
+                      <Input
+                        {...props}
+                        value={field.value ?? ""}
+                        error={field.error}
+                      />
                     )}
                   </Field>
                 </label>
@@ -164,21 +156,16 @@ export const SurveySections = () => {
                             >
                               <label>
                                 Question:
-                                <Field
+                                <Field<
+                                  FieldPath<SurveyFormWithQuestion<"text">>
+                                >
                                   name={`sections.${sectionIndex()}.questions.${questionIndex()}.textInput.question`}
                                 >
                                   {(field, props) => (
                                     <Input
+                                      {...props}
                                       value={field.value ?? ""}
-                                      onInput={(value) => {
-                                        setValue(
-                                          form as FormStore<
-                                            SurveyFormWithQuestion<"text">
-                                          >,
-                                          props.name,
-                                          value
-                                        );
-                                      }}
+                                      error={field.error}
                                     />
                                   )}
                                 </Field>
@@ -195,21 +182,16 @@ export const SurveySections = () => {
                               <div>
                                 <label>
                                   Question:
-                                  <Field
+                                  <Field<
+                                    FieldPath<SurveyFormWithQuestion<"radio">>
+                                  >
                                     name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.question`}
                                   >
                                     {(field, props) => (
                                       <Input
+                                        {...props}
                                         value={field.value ?? ""}
-                                        onInput={(value) => {
-                                          setValue(
-                                            form as FormStore<
-                                              SurveyFormWithQuestion<"radio">
-                                            >,
-                                            props.name,
-                                            value
-                                          );
-                                        }}
+                                        error={field.error}
                                       />
                                     )}
                                   </Field>
@@ -226,22 +208,18 @@ export const SurveySections = () => {
                                             <HiddenField
                                               name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.id`}
                                             />
-                                            <Field
+                                            <Field<
+                                              FieldPath<
+                                                SurveyFormWithQuestion<"radio">
+                                              >
+                                            >
                                               name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options.${optionIndex()}.text`}
                                             >
                                               {(field, props) => (
                                                 <Input
-                                                  class="w-80"
+                                                  {...props}
                                                   value={field.value ?? ""}
-                                                  onInput={(value) => {
-                                                    setValue(
-                                                      form as FormStore<
-                                                        SurveyFormWithQuestion<"radio">
-                                                      >,
-                                                      props.name,
-                                                      value
-                                                    );
-                                                  }}
+                                                  error={field.error}
                                                 />
                                               )}
                                             </Field>
@@ -308,7 +286,9 @@ export const SurveySections = () => {
                                 </FieldArray>
                                 <label>
                                   Default Option:
-                                  <Field
+                                  <Field<
+                                    FieldPath<SurveyFormWithQuestion<"radio">>
+                                  >
                                     name={`sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`}
                                   >
                                     {(field, props) => (

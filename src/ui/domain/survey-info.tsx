@@ -14,43 +14,24 @@ export const SurveyInfo = () => {
       <label for="fname">
         First name:
         <Field name="fname">
-          {(field) => (
-            <div>
-              <Input
-                value={field.value ?? ""}
-                onInput={(fname) => setValue(form, "fname", fname)}
-              />
-              <ErrorMessage message={field.error} />
-            </div>
+          {(field, props) => (
+            <Input {...props} value={field.value ?? ""} error={field.error} />
           )}
         </Field>
       </label>
       <label for="lname">
         Last name:
         <Field name="lname">
-          {(field) => (
-            <div>
-              <Input
-                value={field.value ?? ""}
-                onInput={(lname) => setValue(form, "lname", lname)}
-              />
-              <ErrorMessage message={field.error} />
-            </div>
+          {(field, props) => (
+            <Input {...props} value={field.value ?? ""} error={field.error} />
           )}
         </Field>
       </label>
       <label for="email">
         Email:
         <Field name="email">
-          {(field) => (
-            <div>
-              <Input
-                type="email"
-                value={field.value ?? ""}
-                onInput={(email) => setValue(form, "email", email)}
-              />
-              <ErrorMessage message={field.error} />
-            </div>
+          {(field, props) => (
+            <Input {...props} value={field.value ?? ""} error={field.error} />
           )}
         </Field>
       </label>
