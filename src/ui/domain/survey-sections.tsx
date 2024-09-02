@@ -9,6 +9,7 @@ import { Button } from "ui/component/base/button";
 import { HiOutlineMinus, HiOutlinePlus } from "solid-icons/hi";
 import { SurveyFormContext } from "domain/survey/context";
 import {
+  FormStore,
   getValue,
   getValues,
   insert,
@@ -16,6 +17,7 @@ import {
   setValue,
 } from "@modular-forms/solid";
 import { ErrorMessage } from "ui/component/error-message";
+import { SurveyFormWithQuestion } from "domain/survey/type";
 
 export const SurveySections = () => {
   const [form, { Field, FieldArray, HiddenField }] =
@@ -169,7 +171,13 @@ export const SurveySections = () => {
                                     <Input
                                       value={field.value ?? ""}
                                       onInput={(value) => {
-                                        setValue(form, props.name, value);
+                                        setValue(
+                                          form as FormStore<
+                                            SurveyFormWithQuestion<"text">
+                                          >,
+                                          props.name,
+                                          value
+                                        );
                                       }}
                                     />
                                   )}
@@ -194,7 +202,13 @@ export const SurveySections = () => {
                                       <Input
                                         value={field.value ?? ""}
                                         onInput={(value) => {
-                                          setValue(form, props.name, value);
+                                          setValue(
+                                            form as FormStore<
+                                              SurveyFormWithQuestion<"radio">
+                                            >,
+                                            props.name,
+                                            value
+                                          );
                                         }}
                                       />
                                     )}
@@ -221,7 +235,9 @@ export const SurveySections = () => {
                                                   value={field.value ?? ""}
                                                   onInput={(value) => {
                                                     setValue(
-                                                      form,
+                                                      form as FormStore<
+                                                        SurveyFormWithQuestion<"radio">
+                                                      >,
                                                       props.name,
                                                       value
                                                     );
@@ -234,7 +250,9 @@ export const SurveySections = () => {
                                               size="icon"
                                               onClick={() =>
                                                 insert(
-                                                  form,
+                                                  form as FormStore<
+                                                    SurveyFormWithQuestion<"radio">
+                                                  >,
                                                   `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`,
                                                   {
                                                     value: {
@@ -266,7 +284,9 @@ export const SurveySections = () => {
                                                   )
                                                 ) {
                                                   setValue(
-                                                    form,
+                                                    form as FormStore<
+                                                      SurveyFormWithQuestion<"radio">
+                                                    >,
                                                     `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.defaultOptionId`,
                                                     null
                                                   );
@@ -295,7 +315,9 @@ export const SurveySections = () => {
                                       <Select
                                         options={
                                           getValues(
-                                            form,
+                                            form as FormStore<
+                                              SurveyFormWithQuestion<"radio">
+                                            >,
                                             `sections.${sectionIndex()}.questions.${questionIndex()}.radioInput.options`
                                           )?.map((o) => ({
                                             label: o?.text ?? "",
@@ -304,7 +326,13 @@ export const SurveySections = () => {
                                         }
                                         placeholder="Select default option"
                                         onChange={(value) =>
-                                          setValue(form, props.name, value)
+                                          setValue(
+                                            form as FormStore<
+                                              SurveyFormWithQuestion<"radio">
+                                            >,
+                                            props.name,
+                                            value
+                                          )
                                         }
                                         allowClear
                                         value={field.value ?? null}
