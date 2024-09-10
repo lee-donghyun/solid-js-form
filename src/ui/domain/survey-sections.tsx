@@ -10,6 +10,7 @@ import { HiOutlineMinus, HiOutlinePlus } from "solid-icons/hi";
 import { SurveyFormContext } from "domain/survey/context";
 import {
   FieldPath,
+  focus,
   getValue,
   getValues,
   insert,
@@ -38,9 +39,17 @@ export const SurveySections = () => {
                       size="icon"
                       variant="outline"
                       type="button"
-                      onClick={() =>
-                        insert(form, "sections", { value: getDefaultSection() })
-                      }
+                      onClick={() => {
+                        insert(form, "sections", {
+                          value: getDefaultSection(),
+                        });
+                        focus(
+                          form,
+                          `sections.${
+                            getValues(form, "sections").length - 1
+                          }.title`
+                        );
+                      }}
                     >
                       <HiOutlinePlus />
                     </Button>

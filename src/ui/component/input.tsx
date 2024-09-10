@@ -10,6 +10,7 @@ interface InputProps {
   value: string;
   class?: string;
   error: string;
+  ref?: unknown;
 }
 
 export const Input = (props: InputProps) => {
@@ -17,6 +18,7 @@ export const Input = (props: InputProps) => {
     <div>
       <TextFieldRoot>
         <TextField
+          ref={props.ref}
           type={props.type}
           id={props.id}
           name={props.name}
