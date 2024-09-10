@@ -11,8 +11,6 @@ import { Button } from "ui/component/base/button";
 export const App = () => {
   const [form, { Form, Field, FieldArray }] = createForm<SurveyForm>({
     initialValues: getDefaultSurveyForm(),
-    validateOn: "input",
-    revalidateOn: "input",
     validate: zodForm(SurveyFormSchema),
   });
 
