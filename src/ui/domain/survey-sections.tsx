@@ -22,7 +22,8 @@ import { SurveyFormWithQuestion } from "domain/survey/type";
 import { SurveyQuestionRadio } from "./survey-question-radio";
 
 export const SurveySections = () => {
-  const [form, { Field, FieldArray }] = useContext(SurveyFormContext)!;
+  const [form, { Field, FieldArray, HiddenField }] =
+    useContext(SurveyFormContext)!;
 
   return (
     <div class="styled">
@@ -32,6 +33,7 @@ export const SurveySections = () => {
           <For each={sectionField.items}>
             {(_, sectionIndex) => (
               <div>
+                <HiddenField name={`sections.${sectionIndex()}.id`} />
                 <h4 class="text-2xl mt-16 mb-5 flex justify-between">
                   Section {sectionIndex() + 1}:
                   <div class="flex gap-3">
