@@ -6,6 +6,7 @@ import {
   setValue,
   remove,
   getValues,
+  focus,
 } from "@modular-forms/solid";
 import { SurveyFormContext } from "domain/survey/context";
 import { SurveyFormWithQuestion } from "domain/survey/type";
@@ -66,7 +67,7 @@ export const SurveyQuestionRadio = (props: SurveyQuestionRadioProps) => {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() =>
+                    onClick={() => {
                       insert(
                         form as FormStore<SurveyFormWithQuestion<"radio">>,
                         `sections.${props.sectionIndex}.questions.${props.questionIndex}.radioInput.options`,
@@ -77,8 +78,14 @@ export const SurveyQuestionRadio = (props: SurveyQuestionRadioProps) => {
                           },
                           at: optionIndex() + 1,
                         }
-                      )
-                    }
+                      );
+                      focus(
+                        form,
+                        `sections.${props.sectionIndex}.questions.${
+                          props.questionIndex
+                        }.radioInput.options.${optionIndex() + 1}.text`
+                      );
+                    }}
                   >
                     <HiOutlinePlus />
                   </Button>
