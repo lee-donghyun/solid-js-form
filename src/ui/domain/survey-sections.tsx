@@ -25,6 +25,43 @@ export const SurveySections = () => {
   const [form, { Field, FieldArray, HiddenField }] =
     useContext(SurveyFormContext)!;
 
+  const insertSection = (at: number) => {
+    insert(form, "sections", { at, value: getDefaultSection() });
+    focus(form, `sections.${at}.title`);
+  };
+
+  const validateRadioLink = (sectionIndex: number) => {
+    const sections = getValues(form, "sections");
+    sections?.forEach((section, index) => {
+      section?.questions?.forEach((question, qIndex) => {
+        if (!question) return;
+        if (question.type === "radio-link") {
+          question.radioLinkInput?.options?.forEach((option, oIndex) => {
+            if (option?.nextSectionId === sections[sectionIndex]?.id) {
+              reset(
+                form,
+                `sections.${index}.questions.${qIndex}.radioLinkInput.options.${oIndex}.nextSectionId`
+              );
+              reset(
+                form,
+                `sections.${index}.questions.${qIndex}.radioLinkInput.options.${oIndex}.nextSectionQuestionId`
+              );
+            }
+          });
+        }
+      });
+    });
+  };
+
+  const removeSection = (sectionIndex: number) => {
+    validateRadioLink(sectionIndex);
+    remove(form, "sections", { at: sectionIndex });
+  };
+
+  const questionTypeOptions = (
+    ["radio", "checkbox", "date", "text"] as const
+  ).map((o) => ({ label: o, value: o }));
+
   return (
     <div class="styled">
       <h3>Section</h3>
@@ -41,17 +78,7 @@ export const SurveySections = () => {
                       size="icon"
                       variant="outline"
                       type="button"
-                      onClick={() => {
-                        insert(form, "sections", {
-                          value: getDefaultSection(),
-                        });
-                        focus(
-                          form,
-                          `sections.${
-                            getValues(form, "sections").length - 1
-                          }.title`
-                        );
-                      }}
+                      onClick={() => insertSection(sectionIndex() + 1)}
                     >
                       <HiOutlinePlus />
                     </Button>
@@ -59,35 +86,7 @@ export const SurveySections = () => {
                       size="icon"
                       disabled={sectionField.items.length === 1}
                       variant="outline"
-                      onClick={() => {
-                        const sections = getValues(form, "sections");
-                        sections?.forEach((section, index) => {
-                          section?.questions?.forEach((question, qIndex) => {
-                            if (!question) return;
-                            if (question.type === "radio-link") {
-                              question.radioLinkInput?.options?.forEach(
-                                (option, oIndex) => {
-                                  if (
-                                    option?.nextSectionId ===
-                                    sections[sectionIndex()]?.id
-                                  ) {
-                                    reset(
-                                      form,
-                                      `sections.${index}.questions.${qIndex}.radioLinkInput.options.${oIndex}.nextSectionId`
-                                    );
-                                    reset(
-                                      form,
-                                      `sections.${index}.questions.${qIndex}.radioLinkInput.options.${oIndex}.nextSectionQuestionId`
-                                    );
-                                  }
-                                }
-                              );
-                            }
-                          });
-                        });
-
-                        remove(form, "sections", { at: sectionIndex() });
-                      }}
+                      onClick={() => removeSection(sectionIndex())}
                     >
                       <HiOutlineMinus />
                     </Button>
@@ -164,14 +163,7 @@ export const SurveySections = () => {
                             >
                               {(field, props) => (
                                 <Select
-                                  options={(
-                                    [
-                                      "radio",
-                                      "checkbox",
-                                      "date",
-                                      "text",
-                                    ] as const
-                                  ).map((o) => ({ label: o, value: o }))}
+                                  options={questionTypeOptions}
                                   value={
                                     (field.value?.split("-")[0] ??
                                       "text") as "text"
